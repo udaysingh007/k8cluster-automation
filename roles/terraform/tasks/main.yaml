@@ -1,0 +1,21 @@
+- name: Initialize Terraform
+  shell: terraform init
+  args:
+    chdir: "{{ playbook_dir }}/terraform"
+
+- name: Apply Terraform to provision EC2 instances
+  shell: terraform apply -auto-approve
+  args:
+    chdir: "{{ playbook_dir }}/terraform"
+
+- name: Fetch Terraform output
+  shell: terraform output -json
+  args:
+    chdir: "{{ playbook_dir }}/terraform"
+  register: terraform_output
+
+- name: Save inventory to a file
+  copy:
+    content: "{{ terraform_output }}"
+    dest: "{{ playbook_dir }}/inventory/dynamic_inventory.json"
+

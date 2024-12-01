@@ -1,0 +1,24 @@
+- name: Initialize Kubernetes Cluster
+  hosts: control_plane[0]
+  become: true
+  tasks:
+    - name: Initialize control plane
+      shell: |
+        kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address={{ ansible_host }}
+        mkdir -p $HOME/.kube
+        cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        chown $(id -u):$(id -g) $HOME/.kube/config
+      register: kubeadm_init_output
+
+    - name: Extract join command
+      set_fact:
+        join_command: "{{ kubeadm_init_output.stdout_lines | select('search', 'kubeadm join') | list | first }}"
+
+
+- name: Join Nodes to Cluster
+  hosts: all:!control_plane[0]
+  become: true
+  tasks:
+    - name: Join the cluster
+      shell: "{{ hostvars['control_plane'][0].join_command }}"
+

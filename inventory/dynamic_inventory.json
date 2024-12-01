@@ -1,0 +1,38 @@
+{
+  "control_plane_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "10.238.151.252",
+      "10.151.180.64",
+      "10.89.73.253"
+    ]
+  },
+  "worker_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "10.233.58.135",
+      "10.134.107.253",
+      "10.225.97.168",
+      "10.191.15.126",
+      "10.228.55.86"
+    ]
+  }
+}
